@@ -18,7 +18,7 @@ Just simple example of flex message from LINE Messaging API with Redis for cachi
  - 2 chicken burgers from McDonald's with extra cheese
 
 ## Preparation
- - Create and define `.env` file based on [`.env.example`](./env.example)
+ - Create and define `.env` file based on [`.env.example`](./.env.example)
  - Create [LINE Messaging API](https://developers.line.me/en), get the channel secret and channel access token in Channel settings tab and put that in `.env`
  - Create account or login in [OpenWeatherMap](https://openweathermap.org), get the API key and put that in `.env`
  - Run your Redis server
