@@ -4,6 +4,7 @@ import menu from './controllers/menu'
 import ping from './controllers/ping'
 import current from './controllers/current'
 import forecast from './controllers/forecast'
+import { incoming } from './utils/log'
 
 
 dotenv.config()
@@ -14,6 +15,7 @@ export default {
   client: client,
   middleware: line.middleware({ channelSecret: process.env.CHANNEL_SECRET }),
   webhook: (req, res) => {
+    incoming(req.body.events)
     req.body.events.map(event => {
       console.log(event)
       controllers.forEach(async e => {

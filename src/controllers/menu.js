@@ -1,6 +1,9 @@
+import { outgoing } from '../utils/log'
+
+
 export default function (bot, event) {
   if (event.type === 'message' && event.message.type === 'text' && (event.message.text === '/menu' || event.message.text === '/start')) {
-    return bot.replyMessage(event.replyToken, {
+    let reply = {
       type: 'template',
       altText: 'Open from your smartphone',
       template: {
@@ -30,7 +33,9 @@ export default function (bot, event) {
           }
         ]
       }
-    })
+    }
+    return bot.replyMessage(event.replyToken, reply)
+      .then(() => outgoing(event.source, reply))
   }
   return null
 }

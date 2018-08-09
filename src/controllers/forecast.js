@@ -2,6 +2,8 @@ import axios from 'axios'
 import redis from 'redis'
 import bluebird from 'bluebird'
 import moment from 'moment'
+import { outgoing } from '../utils/log'
+
 
 
 export default async function (bot, event) {
@@ -11,9 +13,10 @@ export default async function (bot, event) {
 
   if (event.type === 'message') {
     const userId = event.source.userId
+    let reply
     if (event.message.type === 'text' && event.message.text === '/forecast') {
       redisClient.set(`/${userId}/state`, 'forecast')
-      return bot.replyMessage(event.replyToken, {
+      reply = {
         type: 'template',
         altText: 'Open from your smartphone',
         template: {
@@ -28,7 +31,9 @@ export default async function (bot, event) {
             }
           ]
         }
-      })
+      }
+      return bot.replyMessage(event.replyToken, reply)
+        .then(() => outgoing(event.source, reply))
     } else if (event.message.type === 'location') {
       try {
         var state = await redisClient.getAsync(`/${userId}/state`)
@@ -48,7 +53,7 @@ export default async function (bot, event) {
         } catch (err) { console.log(`[ERROR] ${err}`) }
 
         const data = forecast.data
-        return bot.replyMessage(event.replyToken, {
+        reply = {
           type: 'flex',
           altText: 'Open from your smartphone',
           contents: {
@@ -168,7 +173,9 @@ export default async function (bot, event) {
               }
             })
           }
-        })
+        }
+        return bot.replyMessage(event.replyToken, reply)
+          .then(() => outgoing(event.source, reply))
       }
     }
   }
